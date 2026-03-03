@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مولد بطاقات الموظفين</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Tajawal', sans-serif; text-align: center; background-color: #f4f4f9; padding: 20px; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        input { width: 80%; padding: 12px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; text-align: center; }
+        button { background-color: #2ecc71; color: white; border: none; padding: 12px 25px; border-radius: 8px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        button:hover { background-color: #27ae60; }
+        canvas { max-width: 100%; height: auto; margin-top: 20px; border-radius: 10px; display: none; }
+        #downloadBtn { background-color: #3498db; margin-top: 15px; display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>اصنع بطاقتك بنفسك 🎨</h2>
+    <p>اكتب اسمك أدناه ثم اضغط على "عرض البطاقة"</p>
+    
+    <input type="text" id="userName" placeholder="اكتب اسمك هنا...">
+    <br>
+    <button onclick="generateCard()">عرض البطاقة ✨</button>
+    
+    <canvas id="cardCanvas"></canvas>
+    <br>
+    <button id="downloadBtn" onclick="downloadCard()">تحميل البطاقة 📥</button>
+</div>
+
+<script>
+    const canvas = document.getElementById('cardCanvas');
+    const ctx = canvas.getContext('2d');
+    const downloadBtn = document.getElementById('downloadBtn');
+    
+    // إعدادات الصورة (قم بتغيير اسم الصورة هنا إذا لزم الأمر)
+    const img = new Image();
+    img.src = 'card.png'; // تأكد أن الصورة بنفس المجلد
+
+    function generateCard() {
+        const name = document.getElementById('userName').value;
+        if (!name) { alert("من فضلك اكتب اسمك أولاً"); return; }
+
+        // رسم الصورة على الكانفاس
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+
+        // إعدادات النص
+        ctx.font = 'bold 55px "Tajawal"'; // حجم الخط ونوعه
+        ctx.fillStyle = '#000000'; // لون الخط (أسود)
+        ctx.textAlign = 'center';
+
+        // --- (تعديل الإحداثيات هنا) ---
+        // اجعل الرقم الثاني (height/2) يتغير حتى يضبط مكان الاسم فوق التصميم
+        ctx.fillText(name, canvas.width / 2, canvas.height * 0.865);
+
+        canvas.style.display = 'block';
+        downloadBtn.style.display = 'inline-block';
+    }
+
+    function downloadCard() {
+        const link = document.createElement('a');
+        link.download = 'MyCard.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    }
+</script>
+
+</body>
+</html>
